@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A97973A61AC32E900061E74F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A97973A51AC32E900061E74F /* main.cpp */; };
+		A97973AE1AC32EB70061E74F /* graphdb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A97973AC1AC32EB70061E74F /* graphdb.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,9 @@
 /* Begin PBXFileReference section */
 		A97973A21AC32E900061E74F /* CliquePartitioning */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CliquePartitioning; sourceTree = BUILT_PRODUCTS_DIR; };
 		A97973A51AC32E900061E74F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		A97973AC1AC32EB70061E74F /* graphdb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = graphdb.cpp; path = ../graphdb.cpp; sourceTree = "<group>"; };
+		A97973AD1AC32EB70061E74F /* graphdb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = graphdb.h; path = ../graphdb.h; sourceTree = "<group>"; };
+		A97973AF1AC3DE680061E74F /* testData01.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = testData01.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +61,10 @@
 		A97973A41AC32E900061E74F /* CliquePartitioning */ = {
 			isa = PBXGroup;
 			children = (
+				A97973AD1AC32EB70061E74F /* graphdb.h */,
+				A97973AC1AC32EB70061E74F /* graphdb.cpp */,
 				A97973A51AC32E900061E74F /* main.cpp */,
+				A97973AF1AC3DE680061E74F /* testData01.txt */,
 			);
 			path = CliquePartitioning;
 			sourceTree = "<group>";
@@ -118,6 +125,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A97973AE1AC32EB70061E74F /* graphdb.cpp in Sources */,
 				A97973A61AC32E900061E74F /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -232,6 +240,7 @@
 				A97973AB1AC32E900061E74F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
