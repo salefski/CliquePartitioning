@@ -12,19 +12,18 @@
 void graphDatabaseClass::deepCopy(const graphDatabaseClass& src) {
     edgeCount = src.edgeCount;
     directed = src.directed;
-	verticies.resize(src.verticies.size());
+	verticies = src.verticies; // copy the verticies
 	auto dstVertex = verticies.begin();
 	auto srcVertex = src.verticies.begin();
-	while((dstVertex < verticies.end()) && (srcVertex < src.verticies.end())) {
-		dstVertex->vertexName.assign(srcVertex->vertexName);
-		dstVertex->vertexBits = srcVertex->vertexBits;
+	while((dstVertex != verticies.end()) && (srcVertex != src.verticies.end())) {
+		dstVertex->second.vertexBits = srcVertex->second.vertexBits;
 		// copy the edge list
-		if (srcVertex->edgeList) {
+		if (srcVertex->second.edgeList) {
 			// copy first edge
-			dstVertex->edgeList = new edgeRecord(*srcVertex->edgeList);
+			dstVertex->second.edgeList = new edgeRecord(*srcVertex->second.edgeList);
 			// copy the remaining edges
-			edgeRecord* dstEdge = dstVertex->edgeList;
-			edgeRecord* srcEdge = srcVertex->edgeList;
+			edgeRecord* dstEdge = dstVertex->second.edgeList;
+			edgeRecord* srcEdge = srcVertex->second.edgeList;
 			while(srcEdge->next != nullptr) {
 				dstEdge->next = new edgeRecord(*srcEdge->next);
 				srcEdge = srcEdge->next;
@@ -41,14 +40,15 @@ void graphDatabaseClass::deepCopy(const graphDatabaseClass& src) {
 //
 void graphDatabaseClass::clearEdgeLists() {
 	edgeRecord* edgeToDelete = nullptr;
-	for (auto &vtr : verticies) {
-		edgeRecord* e = vtr.edgeList;
+    verticiesT::iterator vtr;
+    for (vtr = verticies.begin(); vtr != verticies.end(); ++vtr) {
+		edgeRecord* e = vtr->second.edgeList;
 		while (e != nullptr) {
 			edgeToDelete = e;
 			e = e->next;
 			delete edgeToDelete;
 		}
-		vtr.edgeList = nullptr;
+		vtr->second.edgeList = nullptr;
 	}
 }
 
@@ -60,10 +60,6 @@ graphDatabaseClass::graphDatabaseClass() {
 graphDatabaseClass::graphDatabaseClass(const graphDatabaseClass& src) {
 	deepCopy(src);
 };
-// destructor
-graphDatabaseClass::~graphDatabaseClass() {
-	clearEdgeLists();
-}
 
 // copy operator
 graphDatabaseClass& graphDatabaseClass::operator= (const graphDatabaseClass &rhs) {
@@ -75,26 +71,17 @@ graphDatabaseClass& graphDatabaseClass::operator= (const graphDatabaseClass &rhs
 	return *this;;
 };
 
+graphDatabaseClass::~graphDatabaseClass() {
+};
 
 void graphDatabaseClass::initializeGraph(int numVerticies, bool isDirected) {
     directed = isDirected;
 	clearEdgeLists();
 	verticies.clear();
-	verticies.resize(numVerticies);
 };
 
-int graphDatabaseClass::lookupVertexIndex (std::string vertexNameToFind) {
-    int i=0;
-    for(auto &itr : verticies) {
-        if(itr.vertexName.compare(vertexNameToFind) == 0) {
-            return(i);
-        }
-        ++i;
-    }
-    return(-1);
-}
 
-void graphDatabaseClass::insertEdgeUtility(int x, int y, int w) {
+void graphDatabaseClass::insertEdgeUtility(vertexKeyT x, vertexKeyT y, int w) {
 	edgeRecord* newEdge = new edgeRecord;
     newEdge->vertexID = y;
     newEdge->weight = w;
@@ -110,15 +97,15 @@ void graphDatabaseClass::insertEdgeUtility(int x, int y, int w) {
     ++edgeCount;
 }
 
-void graphDatabaseClass::insertEdge(int x, int y, int w) {
+void graphDatabaseClass::insertEdge(vertexKeyT x, vertexKeyT y, int w) {
 	insertEdgeUtility(x, y, w);
 	insertEdgeUtility(y, x, w);
 	if (noisy()) {
-		printf("adding edge %i to %i\n", x, y);
+		printf("adding edge %s to %s\n", x.c_str(), y.c_str());
 	}
 }
 
-bool graphDatabaseClass::deleteEdgeUtility(int x, int y) {
+bool graphDatabaseClass::deleteEdgeUtility(vertexKeyT x, vertexKeyT y) {
 	bool returnVal = false;
 	if (verticies[x].edgeList->vertexID == y) {
 		// delete the head of the edgeList
@@ -147,13 +134,13 @@ bool graphDatabaseClass::deleteEdgeUtility(int x, int y) {
 	}
 	if (noisy()) {
 		if (returnVal == false) {
-			printf("deleteEdgeUtility(): Not able to find an edge to delete from %i to %i\n", x, y);
+			printf("deleteEdgeUtility(): Not able to find an edge to delete from %s to %s\n", x.c_str(), y.c_str());
 		}
 	}
 	return returnVal;
 }
 
-bool graphDatabaseClass::deleteEdge(int x, int y) {
+bool graphDatabaseClass::deleteEdge(vertexKeyT x, vertexKeyT y) {
 	bool returnVal1 = false;
 	bool returnVal2 = false;
 	returnVal1 = deleteEdgeUtility(x, y);
@@ -161,22 +148,22 @@ bool graphDatabaseClass::deleteEdge(int x, int y) {
 	return (returnVal1 && returnVal2);
 }
 
-bool graphDatabaseClass::deleteVertex(int x) {
+bool graphDatabaseClass::deleteVertex(vertexKeyT x) {
 	if (noisy()) {
-		printf("deleting vertex %i\n", x);
+		printf("deleting vertex %s\n", x.c_str());
 	}
     if(verticies[x].edgeList != nullptr) {
         printf("Deleting a vertex with non-empty edgelist\n");
     }
 	// erase from the list of verticies
-	verticies.erase(verticies.begin()+x);
+	verticies.erase(x);
 	return true;
 }
 
 //
 // deletes all the edges to and from from vertex x
 //
-void graphDatabaseClass::disconnectVertex(int x) {
+void graphDatabaseClass::disconnectVertex(vertexKeyT x) {
 	edgeRecord* e = verticies[x].edgeList;
 	edgeRecord* edgeToDelete = nullptr;
 	while (e != nullptr) {
@@ -189,28 +176,8 @@ void graphDatabaseClass::disconnectVertex(int x) {
 	verticies[x].edgeList = nullptr;
 	verticies[x].degree = 0;
 }
-//
-// merges two verticies. Assumes they are already disconnected
-//
-int graphDatabaseClass::mergeVerticies(int x, int y) {
-    if(x>y) {
-        int tmp = x;
-        x = y;
-        y = tmp;
-    }
-	if (noisy()) {
-		printf("merging vertex %s and %s ", verticies[x].vertexName.c_str(), verticies[y].vertexName.c_str());
-	}
-    verticies[x].vertexName = verticies[x].vertexName + " & " + verticies[y].vertexName;
-    verticies[x].vertexBits = verticies[x].vertexBits | verticies[y].vertexBits;
-	if (noisy()) {
-		printf("into vertex %s\n", verticies[x].vertexName.c_str());
-	}
-	deleteVertex(y);
-    return x;
-}
 
-void graphDatabaseClass::commonNeighbor(int si, int sj, std::vector<int>& returnVal) {
+void graphDatabaseClass::commonNeighbor(vertexKeyT si, vertexKeyT sj, std::vector<vertexKeyT>& returnVal) {
     returnVal.clear();
     // go through each edgeList for si and sj to determine which edges have the same destination
     for(edgeRecord* esi = verticies[si].edgeList; esi != nullptr; esi = esi->next) {
@@ -231,25 +198,34 @@ bool graphDatabaseClass::readGraph(FILE* f) {
     int numVerticies=0;
     int numEdges=0; // counter for # edges, inserteEdge increments g->nedges
     int isDirected=0;
-    int x=0, y=0; // vertices in edge (x,y)
     int w=0; // weight of edge
-    char fromVertexName[maxVertexNameLength];
-    char toVertexName[maxVertexNameLength];
     
     fscanf(f, "%i %i %i", &numVerticies, &numEdges, &isDirected);
     initializeGraph(numVerticies, (isDirected==1));
     // read in the vertex names
     for(int i=0; i<numVerticies; ++i) {
-        fscanf(f, "%s", fromVertexName);
-        verticies[i].vertexName.assign(fromVertexName);
+        verticiesT::iterator vtr;
+        char vertexToInsertCstr[maxVertexNameLength];
+        vertexKeyT vertexToInsert;
+        fscanf(f, "%s", vertexToInsertCstr);
+        vertexToInsert.assign(vertexToInsertCstr);
+        vtr = verticies.find(vertexToInsertCstr);
+        if(vtr != verticies.end()) {
+            printf("readGraph(): duplicate vertex name %s; not inserted again\n", vertexToInsert.c_str());
+            continue;
+        }
+        verticies[vertexToInsert]; // inserts vertex
     }
     
     // Read in the edges.
     while(!feof(f)) {
-        if(3==fscanf(f, "%s %s %i", fromVertexName, toVertexName, &w)) {
-            x = lookupVertexIndex(fromVertexName);
-            y = lookupVertexIndex(toVertexName);
-            insertEdge(x, y, w); // all edges are explicit, so directed == true
+        char fromVertexNameCstr[maxVertexNameLength];
+        char toVertexNameCstr[maxVertexNameLength];
+        vertexKeyT fromVertexKey, toVertexKey;
+        if(3==fscanf(f, "%s %s %i", fromVertexNameCstr, toVertexNameCstr, &w)) {
+            fromVertexKey.assign(fromVertexNameCstr);
+            toVertexKey.assign(toVertexNameCstr);
+            insertEdge(fromVertexKey, toVertexKey , w); // all edges are explicit, so directed == true
         } else {
             printf("Error reading graph file\n");
             return false;
@@ -261,16 +237,17 @@ bool graphDatabaseClass::readGraph(FILE* f) {
 bool graphDatabaseClass::writeGraph (FILE* f) {
 
     fprintf(f, "%lu %d %i\n", verticies.size(), edgeCount, (directed?1:0));
-    
+    verticiesT::iterator vtr;
+
     // print the vertex names
-    for(auto vtr : verticies) {
-        fprintf(f, "%s\n", vtr.vertexName.c_str());
+    for(vtr=verticies.begin(); vtr != verticies.end(); ++vtr) {
+        fprintf(f, "%s\n", vtr->first.c_str());
     };
     
-    for(int x = 0; x < verticies.size(); ++x) {
-        for(edgeRecord* e = verticies[x].edgeList; e != nullptr; e=e->next) {
-            fprintf(f, "%s ", verticies[x].vertexName.c_str());
-            fprintf(f, "%s ", verticies[e->vertexID].vertexName.c_str());
+    for(vtr=verticies.begin(); vtr != verticies.end(); ++vtr) {
+        for(edgeRecord* e = vtr->second.edgeList; e != nullptr; e=e->next) {
+            fprintf(f, "%s ", vtr->first.c_str());
+            fprintf(f, "%s ", e->vertexID.c_str());
             fprintf(f, "%i\n", e->weight);
         }
     }
