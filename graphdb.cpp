@@ -62,13 +62,9 @@ graphDatabaseClass::graphDatabaseClass(const graphDatabaseClass& src) {
 };
 
 // copy operator
-graphDatabaseClass& graphDatabaseClass::operator= (const graphDatabaseClass &rhs) {
-	if (this != &rhs) {
-		clearEdgeLists();
-		verticies.clear();
-		deepCopy(rhs);
-	}
-	return *this;;
+graphDatabaseClass& graphDatabaseClass::operator= (graphDatabaseClass rhs) {
+    swap(*this, rhs);
+	return *this;
 };
 
 graphDatabaseClass::~graphDatabaseClass() {

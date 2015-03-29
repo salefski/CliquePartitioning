@@ -99,7 +99,7 @@ public:
 	// contstructor to copy from an existing graph
 	graphDatabaseClass(const graphDatabaseClass& other); 
 	// copy operator
-	graphDatabaseClass& operator= (const graphDatabaseClass &rhs);
+	graphDatabaseClass& operator= (graphDatabaseClass rhs);
     ~graphDatabaseClass();
     
     int numVerticies();
@@ -115,6 +115,16 @@ public:
 	void disconnectVertex(vertexKeyT x);
     bool deleteVertex(vertexKeyT x);
     void commonNeighbor(vertexKeyT si, vertexKeyT sj, std::vector<vertexKeyT>& returnVal);
+    
+    friend void swap(graphDatabaseClass& first, graphDatabaseClass& second) {
+        // enable ADL (not necessary in our case, but good practice)
+        using std::swap;
+        // by swapping the members of two classes,
+        // the two classes are effectively swapped
+        swap(first.edgeCount, second.edgeCount);
+        swap(first.verticies  , second.verticies);
+    }
+
 };
 
 #endif /* defined(__CliquePartitioning__graphdb__) */

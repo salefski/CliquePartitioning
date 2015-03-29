@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "graphdb.cpp"
-            timestampString = "449253943.979982"
+            timestampString = "449341015.285818"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "163"
-            endingLineNumber = "163">
+            startingLineNumber = "159"
+            endingLineNumber = "159">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -120,11 +120,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "graphdb.cpp"
-            timestampString = "449253943.979982"
+            timestampString = "449341015.285818"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "221"
-            endingLineNumber = "221"
+            startingLineNumber = "217"
+            endingLineNumber = "217"
             landmarkName = "graphDatabaseClass::readGraph(FILE* f)"
             landmarkType = "5">
          </BreakpointContent>
@@ -136,11 +136,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "graphdb.cpp"
-            timestampString = "449253943.979982"
+            timestampString = "449341015.285818"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "243"
-            endingLineNumber = "243"
+            startingLineNumber = "239"
+            endingLineNumber = "239"
             landmarkName = "graphDatabaseClass::writeGraph (FILE* f)"
             landmarkType = "5">
          </BreakpointContent>
@@ -164,44 +164,44 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "graphdb.cpp"
-            timestampString = "449253717.150802"
+            timestampString = "449341015.285818"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
+            startingLineNumber = "70"
+            endingLineNumber = "70"
             landmarkName = "graphDatabaseClass::~graphDatabaseClass()"
             landmarkType = "5">
             <Locations>
                <Location
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "graphDatabaseClass::~graphDatabaseClass()"
                   moduleName = "CliquePartitioning"
                   urlString = "file:///Users/Bill/Google%20Drive/Computer%20and%20Network/MacProjects/CliquePartitioning/graphdb.cpp"
-                  timestampString = "449257521.648784"
+                  timestampString = "449341015.606922"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "75"
-                  endingLineNumber = "75"
+                  startingLineNumber = "71"
+                  endingLineNumber = "71"
                   offsetFromSymbolStart = "16">
                </Location>
                <Location
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "graphDatabaseClass::~graphDatabaseClass()"
                   moduleName = "CliquePartitioning"
                   urlString = "file:///Users/Bill/Google%20Drive/Computer%20and%20Network/MacProjects/CliquePartitioning/graphdb.cpp"
-                  timestampString = "449257521.64896"
+                  timestampString = "449341015.607081"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "74"
-                  endingLineNumber = "74"
+                  startingLineNumber = "70"
+                  endingLineNumber = "70"
                   offsetFromSymbolStart = "16">
                </Location>
             </Locations>
