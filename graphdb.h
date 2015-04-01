@@ -17,7 +17,7 @@
 const bool inline noisy() { return true; };
 
 class graphDatabaseClass {
-    
+public:
     const int maxVertexNameLength = 256;
     const unsigned int discoveredBit = (1 << 0);
     const unsigned int processedBit = (1 << 1);
@@ -69,9 +69,10 @@ class graphDatabaseClass {
         };
         // duplicate constructor
         vertexRecord(const vertexRecord &other) :
-        degree(other.degree),
-        vertexBits(other.vertexBits),
-        edgeList(nullptr) {
+	       degree(other.degree),
+	       vertexBits(other.vertexBits),
+	       edgeList(nullptr) 
+		{
             // empty
         }
     };
@@ -84,36 +85,48 @@ class graphDatabaseClass {
     //
     // map of vertex names to vertex records
     //
-    typedef std::map<std::string, vertexRecord, vertexKeyCompare> verticiesT;
+    typedef std::pair<vertexKeyT, vertexRecord> vertexT;
+	typedef std::map<vertexKeyT, vertexRecord, vertexKeyCompare> verticiesT;
     verticiesT verticies;
+    
+private:
     
     void insertEdgeUtility(vertexKeyT x, vertexKeyT y, int w);
     bool deleteEdgeUtility(vertexKeyT x, vertexKeyT y);
     void deepCopy(const graphDatabaseClass& src);
     void clearEdgeLists();
+    bool backPointer(vertexKeyT x, vertexKeyT y);
     
 public:
    
 	// constructor
 	graphDatabaseClass(); 
 	// contstructor to copy from an existing graph
-	graphDatabaseClass(const graphDatabaseClass& other); 
+	graphDatabaseClass(const graphDatabaseClass& other);
+    // move constructor
+    graphDatabaseClass(graphDatabaseClass&& other) : graphDatabaseClass() {
+        swap(*this, other);
+    }
 	// copy operator
 	graphDatabaseClass& operator= (graphDatabaseClass rhs);
+	// destructor
     ~graphDatabaseClass();
     
     int numVerticies();
-    int numEdges();
+    int numEdges() { return edgeCount; }
     bool directed;
     
     void initializeGraph(int numVerticies, bool isDirected);
     bool readGraph(FILE* ifile);
     bool writeGraph(FILE* ofile);
+    
     bool deleteEdge(vertexKeyT x, vertexKeyT y);
     void insertEdge(vertexKeyT x, vertexKeyT y, int w);
     
+    void insertVertex(vertexKeyT x);
 	void disconnectVertex(vertexKeyT x);
     bool deleteVertex(vertexKeyT x);
+    
     void commonNeighbor(vertexKeyT si, vertexKeyT sj, std::vector<vertexKeyT>& returnVal);
     
     friend void swap(graphDatabaseClass& first, graphDatabaseClass& second) {
@@ -122,9 +135,10 @@ public:
         // by swapping the members of two classes,
         // the two classes are effectively swapped
         swap(first.edgeCount, second.edgeCount);
-        swap(first.verticies  , second.verticies);
+        swap(first.verticies, second.verticies);
     }
-
+	// checks the graph database for consistency
+	void checkGraph();
 };
 
 #endif /* defined(__CliquePartitioning__graphdb__) */

@@ -12,7 +12,9 @@
 void graphDatabaseClass::deepCopy(const graphDatabaseClass& src) {
     edgeCount = src.edgeCount;
     directed = src.directed;
-	verticies = src.verticies; // copy the verticies
+	// copy the verticies
+	verticies = src.verticies;
+	// copy the edge lists
 	auto dstVertex = verticies.begin();
 	auto srcVertex = src.verticies.begin();
 	while((dstVertex != verticies.end()) && (srcVertex != src.verticies.end())) {
@@ -62,12 +64,16 @@ graphDatabaseClass::graphDatabaseClass(const graphDatabaseClass& src) {
 };
 
 // copy operator
+// pass by value initializes rhs with constructor graphDatabaseClass(g). 
+// this just swaps rhs into *this
 graphDatabaseClass& graphDatabaseClass::operator= (graphDatabaseClass rhs) {
     swap(*this, rhs);
 	return *this;
 };
 
 graphDatabaseClass::~graphDatabaseClass() {
+	clearEdgeLists();
+	// rest are STL containers with own destructors
 };
 
 void graphDatabaseClass::initializeGraph(int numVerticies, bool isDirected) {
@@ -154,6 +160,19 @@ bool graphDatabaseClass::deleteVertex(vertexKeyT x) {
 	// erase from the list of verticies
 	verticies.erase(x);
 	return true;
+}
+
+
+void graphDatabaseClass::insertVertex(vertexKeyT x) {
+    if (noisy()) {
+        printf("adding vertex %s\n", x.c_str());
+    }
+    auto vtr = verticies.find(x);
+    if(vtr != verticies.end()) {
+        printf("readGraph(): duplicate vertex name %s; not inserted again\n", x.c_str());
+        return;
+    }
+    verticies[x]; // inserts vertex
 }
 
 //
@@ -248,4 +267,56 @@ bool graphDatabaseClass::writeGraph (FILE* f) {
         }
     }
     return true;
+}
+
+// for edge x->y, return true if there is a y->x in the graph
+bool graphDatabaseClass::backPointer(graphDatabaseClass::vertexKeyT x, graphDatabaseClass::vertexKeyT y) {
+    for (auto backe = verticies[x].edgeList; backe != nullptr; backe = backe->next) {
+		if (backe->vertexID.compare(y) == 0) {
+			return true;
+		}
+	}
+	return false;
+}
+//
+// checks everything for consistency
+//
+void graphDatabaseClass::checkGraph() {
+	int checkEdgeCount = 0; // count edges in graph
+	std::vector<vertexKeyT> toVertexID; // remember vertexIDs in edgelist to check for dups
+    for (auto vtr = verticies.begin(); vtr != verticies.end(); ++vtr) {
+		int checkDegreeCount = 0; // count degree for this vertex
+		toVertexID.clear();
+		// verify the edge list
+		for (auto e = vtr->second.edgeList; e != nullptr; e = e->next) {
+			++checkDegreeCount;
+			++checkEdgeCount;
+			// check one edge
+			// check to see if the other vertex is in the graph
+			if (verticies.count(e->vertexID) == 0) {
+				printf("checkGraph(): edge with vertex %s not in graph\n", e->vertexID.c_str());
+			} else { // vertex is in the graph. 
+				// If undirected graph, give error if no back pointer
+				if((!directed) and (!backPointer(vtr->first, e->vertexID))) {
+					printf("checkGraph(): undirected graph edge %s to %s does not have back pointer\n", vtr->first.c_str(), e->vertexID.c_str());
+				}
+				// check that e.vertexID is not duplicated in this edgelist
+				for (auto dupItr : toVertexID) {
+					if (e->vertexID.compare(dupItr) == 0) {
+						printf("checkGraph(): Duplicate edge %s to %s\n", e->vertexID.c_str(), dupItr.c_str());
+					}
+				} // end duplicate check
+			} // end check one edge
+			toVertexID.push_back(e->vertexID); // remember we have seen this vertex ID in this edgelist
+		} // end of verify edge list
+		// 
+		// now check the vertex degree
+		//
+		if (checkDegreeCount != vtr->second.degree) {
+			printf("checkGraph(): degree Count on vertex %s is wrong: should be %i but is %i\n", vtr->first.c_str(), checkDegreeCount, vtr->second.degree);
+		}
+	}
+	if (checkEdgeCount != edgeCount) {
+		printf("checkGraph(): edge count on graph is wrong: should be %i but is %i\n", checkEdgeCount, edgeCount);
+	}
 }
