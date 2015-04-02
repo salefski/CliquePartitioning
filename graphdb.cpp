@@ -303,7 +303,7 @@ void graphDatabaseClass::checkGraph() {
 				// check that e.vertexID is not duplicated in this edgelist
 				for (auto dupItr : toVertexID) {
 					if (e->vertexID.compare(dupItr) == 0) {
-						printf("checkGraph(): Duplicate edge %s to %s\n", e->vertexID.c_str(), dupItr.c_str());
+						printf("checkGraph(): Duplicate edge %s to %s\n", vtr->first.c_str(), e->vertexID.c_str());
 					}
 				} // end duplicate check
 			} // end check one edge

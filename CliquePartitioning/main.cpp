@@ -100,9 +100,9 @@ void BhaskerAlgorithm(const graphDatabaseClass& g,
 
 		if (noisy()) {
 			printf("BhaskerAlgorithm(): Loop %i\n", ++loops);
+            gPrime.checkGraph();
+            gPrime.writeGraph(stdout);
         }
-        gPrime.checkGraph();
-        gPrime.writeGraph(stdout);
 		int pDegree = maxInt();
 		// find the vertex with the smallest degree, call it p
 		for (auto vtr : gPrime.verticies) {
