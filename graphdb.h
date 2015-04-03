@@ -95,7 +95,7 @@ private:
     bool deleteEdgeUtility(vertexKeyT x, vertexKeyT y);
     void deepCopy(const graphDatabaseClass& src);
     void clearEdgeLists();
-    bool backPointer(vertexKeyT x, vertexKeyT y);
+    bool edgeExists(vertexKeyT x, vertexKeyT y);
     
 public:
    

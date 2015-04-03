@@ -204,6 +204,15 @@ void graphDatabaseClass::commonNeighbor(vertexKeyT si, vertexKeyT sj, std::vecto
     }
 }
 
+// for edge x->y, return true if there is a x->y in the graph
+bool graphDatabaseClass::edgeExists(graphDatabaseClass::vertexKeyT x, graphDatabaseClass::vertexKeyT y) {
+    for (auto e = verticies[x].edgeList; e != nullptr; e = e->next) {
+        if (e->vertexID.compare(y) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
 // file format
 // 1: numVertices numEedges isDirected
 // 2-#verticies: vertexName
@@ -213,9 +222,11 @@ bool graphDatabaseClass::readGraph(FILE* f) {
     int numVerticies=0;
     int numEdges=0; // counter for # edges, inserteEdge increments g->nedges
     int isDirected=0;
+    int lineNum=0;
     int w=0; // weight of edge
     
     fscanf(f, "%i %i %i", &numVerticies, &numEdges, &isDirected);
+    ++lineNum;
     initializeGraph(numVerticies, (isDirected==1));
     // read in the vertex names
     for(int i=0; i<numVerticies; ++i) {
@@ -223,6 +234,7 @@ bool graphDatabaseClass::readGraph(FILE* f) {
         char vertexToInsertCstr[maxVertexNameLength];
         vertexKeyT vertexToInsert;
         fscanf(f, "%s", vertexToInsertCstr);
+        ++lineNum;
         vertexToInsert.assign(vertexToInsertCstr);
         vtr = verticies.find(vertexToInsertCstr);
         if(vtr != verticies.end()) {
@@ -238,11 +250,18 @@ bool graphDatabaseClass::readGraph(FILE* f) {
         char toVertexNameCstr[maxVertexNameLength];
         vertexKeyT fromVertexKey, toVertexKey;
         if(3==fscanf(f, "%s %s %i", fromVertexNameCstr, toVertexNameCstr, &w)) {
+            ++lineNum;
             fromVertexKey.assign(fromVertexNameCstr);
             toVertexKey.assign(toVertexNameCstr);
-            insertEdge(fromVertexKey, toVertexKey , w); // all edges are explicit, so directed == true
+            if(noisy()) {
+                if(edgeExists(fromVertexKey, toVertexKey)) {
+                    printf("readGraph(): duplicate edge from %s to %s; not inserted again\n", fromVertexKey.c_str(), toVertexKey.c_str());
+                    continue;
+                }
+            }
+            insertEdge(fromVertexKey, toVertexKey , w); // all edges are explicit
         } else {
-            printf("Error reading graph file\n");
+            printf("Error reading graph file on line %i\n", lineNum);
             return false;
         }
     }
@@ -269,15 +288,6 @@ bool graphDatabaseClass::writeGraph (FILE* f) {
     return true;
 }
 
-// for edge x->y, return true if there is a y->x in the graph
-bool graphDatabaseClass::backPointer(graphDatabaseClass::vertexKeyT x, graphDatabaseClass::vertexKeyT y) {
-    for (auto backe = verticies[x].edgeList; backe != nullptr; backe = backe->next) {
-		if (backe->vertexID.compare(y) == 0) {
-			return true;
-		}
-	}
-	return false;
-}
 //
 // checks everything for consistency
 //
@@ -297,7 +307,7 @@ void graphDatabaseClass::checkGraph() {
 				printf("checkGraph(): edge with vertex %s not in graph\n", e->vertexID.c_str());
 			} else { // vertex is in the graph. 
 				// If undirected graph, give error if no back pointer
-				if((!directed) and (!backPointer(vtr->first, e->vertexID))) {
+				if((!directed) and (!edgeExists(e->vertexID, vtr->first))) {
 					printf("checkGraph(): undirected graph edge %s to %s does not have back pointer\n", vtr->first.c_str(), e->vertexID.c_str());
 				}
 				// check that e.vertexID is not duplicated in this edgelist

@@ -27,7 +27,7 @@ void TsengAlgorithm (const graphDatabaseClass& g,
 			gPrime.writeGraph(stdout);
 		}
         graphDatabaseClass::vertexKeyT si, sj, newVertexKey;
-        graphDatabaseClass::verticiesT::iterator sitr, sjtr;
+        graphDatabaseClass::verticiesT::iterator sitr;
         std::vector<graphDatabaseClass::vertexKeyT> commonNeighbors;
         //
         // Find two verticies with most common neighboers. In case of tie, take
@@ -37,21 +37,22 @@ void TsengAlgorithm (const graphDatabaseClass& g,
         int mostCommons = -1;
         bool foundNewVertex = false;
         for(sitr=gPrime.verticies.begin(); sitr != gPrime.verticies.end(); ++sitr) {
-            for(sjtr = std::next(sitr, 1); sjtr != gPrime.verticies.end(); ++sjtr) {
-                gPrime.commonNeighbor(sitr->first, sjtr->first, commonNeighbors);
+            for(auto e = sitr->second.edgeList; e != nullptr; e = e->next) {
+                gPrime.commonNeighbor(sitr->first, e->vertexID, commonNeighbors);
+                int testSumOfDegrees = sitr->second.degree + gPrime.verticies[e->vertexID].degree;
                 if((int)commonNeighbors.size() > mostCommons) {
                     foundNewVertex = true;
                 } else if((int)commonNeighbors.size() == mostCommons) {
 					// tie breaker
-                    if(sumOfDegrees < sitr->second.degree + sjtr->second.degree) {
+                    if(sumOfDegrees < testSumOfDegrees) {
                         foundNewVertex = true;
                     }
                 }
                 if(foundNewVertex) {
                     mostCommons = (int) commonNeighbors.size();
                     si = sitr->first;
-                    sj = sjtr->first;
-                    sumOfDegrees = sitr->second.degree + sjtr->second.degree;
+                    sj = e->vertexID;
+                    sumOfDegrees = testSumOfDegrees;
                     foundNewVertex = false;
                 }
             }
@@ -71,7 +72,7 @@ void TsengAlgorithm (const graphDatabaseClass& g,
         newVertexKey = si + "," + sj;
         gPrime.insertVertex(newVertexKey);
 		// insert edges to the common neighbers
-        for(auto toVertex : commonNeighbors) {
+        for(const auto &toVertex : commonNeighbors) {
             gPrime.insertEdge(newVertexKey, toVertex, 1);
         }
     }
@@ -79,7 +80,7 @@ void TsengAlgorithm (const graphDatabaseClass& g,
     // All edges gone from gPrime, what remains are the
     // clique super nodes
     //
-    for(auto vtr : gPrime.verticies) {
+    for(const auto &vtr : gPrime.verticies) {
         cliques.push_back(vtr.first);
     }
 }
@@ -100,12 +101,13 @@ void BhaskerAlgorithm(const graphDatabaseClass& g,
 
 		if (noisy()) {
 			printf("BhaskerAlgorithm(): Loop %i\n", ++loops);
-            gPrime.checkGraph();
-            gPrime.writeGraph(stdout);
+			gPrime.checkGraph();
+			gPrime.writeGraph(stdout);
         }
 		int pDegree = maxInt();
-		// find the vertex with the smallest degree, call it p
-		for (auto vtr : gPrime.verticies) {
+		// find the vertex with the smallest non-zero degree, call it p
+		// there must be at least one since there is at least one edge in gPrime
+		for (const auto &vtr : gPrime.verticies) {
 			if ((vtr.second.degree > 0) && (vtr.second.degree < pDegree)) {
 				p = vtr.first;
 				pDegree = vtr.second.degree;
@@ -121,8 +123,7 @@ void BhaskerAlgorithm(const graphDatabaseClass& g,
 		//  2. neighbor of p with smallest degree
 		//  3. tie breaker: has most common neighbors with p
 		//  4. tie breaker: first one we find
-        ;
-		for (auto e = gPrime.verticies[p].edgeList; e != nullptr; e = e->next) {
+    	for (auto e = gPrime.verticies[p].edgeList; e != nullptr; e = e->next) {
 			if (p.compare(e->vertexID) == 0) {
 				// we found the back pointer to p
 				continue;
@@ -132,10 +133,9 @@ void BhaskerAlgorithm(const graphDatabaseClass& g,
 			// if degree is smaller, e is our new q
 			if (gPrime.verticies[e->vertexID].degree < qDegree) {
 				newqFound = true;
-			}
-			else if (gPrime.verticies[e->vertexID].degree == qDegree) {
+			} else if (gPrime.verticies[e->vertexID].degree == qDegree) {
 				// tiebreaker: if e has more common neighbors with p
-				if (commonNeighbors.size() > qCommonNeighbors) {
+				if ((int) commonNeighbors.size() > qCommonNeighbors) {
 					newqFound = true;
 				}
 			}
@@ -151,7 +151,7 @@ void BhaskerAlgorithm(const graphDatabaseClass& g,
 		newVertexKey = p + "," + q;
 		gPrime.insertVertex(newVertexKey);
 		// insert edges to the common neighbers
-		for (auto toVertex : commonNeighbors) {
+		for (const auto &toVertex : commonNeighbors) {
 			gPrime.insertEdge(newVertexKey, toVertex, 1);
 		}
 	}
@@ -159,7 +159,7 @@ void BhaskerAlgorithm(const graphDatabaseClass& g,
 	// All edges gone from gPrime, what remains are the
 	// clique super nodes
 	//
-	for (auto vtr : gPrime.verticies) {
+	for (const auto &vtr : gPrime.verticies) {
 		cliques.push_back(vtr.first);
 	}
 }
@@ -169,7 +169,7 @@ int main(int argc, const char * argv[]) {
     graphDatabaseClass gPrime;
     std::string s1("v1");
     std::string s2("v3");
-    const char * ifname = "/Users/Bill/Google Drive/Computer and Network/MacProjects/CliquePartitioning/CliquePartitioning/testData01.txt";
+    const char * ifname = "/Users/Bill/Google Drive/Computer and Network/MacProjects/CliquePartitioning/CliquePartitioning/testData03.txt";
     
     const char * ofname = "/Users/Bill/Google Drive/Computer and Network/MacProjects/CliquePartitioning/CliquePartitioning/output.txt";
     std::vector<std::string> cliques;
@@ -198,7 +198,7 @@ int main(int argc, const char * argv[]) {
 	if (noisy()) {
 		int numCliques = 0;
 		printf("Tseng Algorithm cliques are: ");
-		for (auto vtr : cliques) {
+		for (const auto &vtr : cliques) {
 			printf("%i. %s\n", ++numCliques, vtr.c_str());
 		}
 	}
@@ -207,7 +207,7 @@ int main(int argc, const char * argv[]) {
 	if (noisy()) {
 		int numCliques = 0;
 		printf("Bhasker Algorithm cliques are: ");
-		for (auto vtr : cliques) {
+		for (const auto &vtr : cliques) {
 			printf("%i. %s\n", ++numCliques, vtr.c_str());
 		}
 	}
