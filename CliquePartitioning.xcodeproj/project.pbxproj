@@ -31,6 +31,7 @@
 		A97973AC1AC32EB70061E74F /* graphdb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = graphdb.cpp; path = ../graphdb.cpp; sourceTree = "<group>"; };
 		A97973AD1AC32EB70061E74F /* graphdb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = graphdb.h; path = ../graphdb.h; sourceTree = "<group>"; };
 		A97973AF1AC3DE680061E74F /* testData01.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = testData01.txt; sourceTree = "<group>"; };
+		A9E9BCBE1AD164EF00D056B3 /* Fig4_Bhasker.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Fig4_Bhasker.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +70,7 @@
 				A97973AF1AC3DE680061E74F /* testData01.txt */,
 				A90F1E781ACC6C0D0015A873 /* testData02.txt */,
 				A90F1E791ACC6DC40015A873 /* testData03.txt */,
+				A9E9BCBE1AD164EF00D056B3 /* Fig4_Bhasker.txt */,
 			);
 			path = CliquePartitioning;
 			sourceTree = "<group>";

@@ -169,7 +169,7 @@ int main(int argc, const char * argv[]) {
     graphDatabaseClass gPrime;
     std::string s1("v1");
     std::string s2("v3");
-    const char * ifname = "/Users/Bill/Google Drive/Computer and Network/MacProjects/CliquePartitioning/CliquePartitioning/testData03.txt";
+    const char * ifname = "/Users/Bill/Google Drive/Computer and Network/MacProjects/CliquePartitioning/CliquePartitioning/Fig4_Bhasker.txt";
     
     const char * ofname = "/Users/Bill/Google Drive/Computer and Network/MacProjects/CliquePartitioning/CliquePartitioning/output.txt";
     std::vector<std::string> cliques;
@@ -197,18 +197,18 @@ int main(int argc, const char * argv[]) {
 	TsengAlgorithm(g, cliques);
 	if (noisy()) {
 		int numCliques = 0;
-		printf("Tseng Algorithm cliques are: ");
+		printf("Tseng Algorithm cliques are:\n");
 		for (const auto &vtr : cliques) {
-			printf("%i. %s\n", ++numCliques, vtr.c_str());
+			printf("  %i. %s\n", ++numCliques, vtr.c_str());
 		}
 	}
 
 	BhaskerAlgorithm(g, cliques);
 	if (noisy()) {
 		int numCliques = 0;
-		printf("Bhasker Algorithm cliques are: ");
+		printf("Bhasker Algorithm cliques are:\n");
 		for (const auto &vtr : cliques) {
-			printf("%i. %s\n", ++numCliques, vtr.c_str());
+			printf("  %i. %s\n", ++numCliques, vtr.c_str());
 		}
 	}
 
