@@ -102,6 +102,7 @@
                   continueAfterRunningActions = "No"
                   symbolName = "graphDatabaseClass::~graphDatabaseClass()"
                   moduleName = "CliquePartitioning"
+                  usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/Bill/Google%20Drive/Computer%20and%20Network/MacProjects/CliquePartitioning/graphdb.cpp"
                   timestampString = "449341015.606922"
                   startingColumnNumber = "9223372036854775807"
@@ -116,6 +117,7 @@
                   continueAfterRunningActions = "No"
                   symbolName = "graphDatabaseClass::~graphDatabaseClass()"
                   moduleName = "CliquePartitioning"
+                  usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/Bill/Google%20Drive/Computer%20and%20Network/MacProjects/CliquePartitioning/graphdb.cpp"
                   timestampString = "449341015.607081"
                   startingColumnNumber = "9223372036854775807"
@@ -134,11 +136,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CliquePartitioning/main.cpp"
-            timestampString = "449469367.218195"
+            timestampString = "535209972.073104"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "15"
-            endingLineNumber = "15">
+            endingLineNumber = "15"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -148,13 +152,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CliquePartitioning/main.cpp"
-            timestampString = "449603843.118013"
+            timestampString = "535209972.099828"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "112"
             endingLineNumber = "112"
             landmarkName = "BhaskerAlgorithm(const graphDatabaseClass&amp; g, std::vector&lt;graphDatabaseClass::vertexKeyT&gt;&amp; cliques )"
-            landmarkType = "7">
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -164,13 +168,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CliquePartitioning/main.cpp"
-            timestampString = "449603843.118013"
+            timestampString = "535209972.100313"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "131"
             endingLineNumber = "131"
             landmarkName = "BhaskerAlgorithm(const graphDatabaseClass&amp; g, std::vector&lt;graphDatabaseClass::vertexKeyT&gt;&amp; cliques )"
-            landmarkType = "7">
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -180,13 +184,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CliquePartitioning/main.cpp"
-            timestampString = "449603843.118013"
+            timestampString = "535209972.100684"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "149"
             endingLineNumber = "149"
             landmarkName = "BhaskerAlgorithm(const graphDatabaseClass&amp; g, std::vector&lt;graphDatabaseClass::vertexKeyT&gt;&amp; cliques )"
-            landmarkType = "7">
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -196,13 +200,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CliquePartitioning/main.cpp"
-            timestampString = "449603843.118013"
+            timestampString = "535209972.101061"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "196"
             endingLineNumber = "196"
             landmarkName = "main(int argc, const char * argv[])"
-            landmarkType = "7">
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -212,13 +216,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CliquePartitioning/main.cpp"
-            timestampString = "449603843.118013"
+            timestampString = "535209972.101437"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "198"
             endingLineNumber = "198"
             landmarkName = "main(int argc, const char * argv[])"
-            landmarkType = "7">
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -228,13 +232,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CliquePartitioning/main.cpp"
-            timestampString = "449603843.118013"
+            timestampString = "535209972.1018"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "60"
             endingLineNumber = "60"
             landmarkName = "TsengAlgorithm (const graphDatabaseClass&amp; g, std::vector&lt;graphDatabaseClass::vertexKeyT&gt;&amp; cliques )"
-            landmarkType = "7">
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -244,13 +248,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CliquePartitioning/main.cpp"
-            timestampString = "449555727.445495"
+            timestampString = "535209972.102163"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "39"
             endingLineNumber = "39"
             landmarkName = "TsengAlgorithm (const graphDatabaseClass&amp; g, std::vector&lt;graphDatabaseClass::vertexKeyT&gt;&amp; cliques )"
-            landmarkType = "7">
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
